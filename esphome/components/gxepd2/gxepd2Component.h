@@ -22,6 +22,7 @@ class GxEPD2Component : public PollingComponent,
   void update() override;
 
   void draw_pixel_at(int x, int y, Color color) override;
+  void fill(Color color) override;
 
   display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_COLOR; }
 

@@ -1,0 +1,25 @@
+# Tests for ESP32-S3 boards
+---
+wifi:
+  ssid: "ssid"
+
+esp32:
+  board: esp32s3box
+  variant: ESP32S3
+  framework:
+    type: arduino
+
+esphome:
+  name: esp32-s3-test
+
+logger:
+
+spi:
+  mosi_pin: 7
+  miso_pin: 6
+  clk_pin: 5
+
+display:
+  - platform: gxepd2
+    cs_pin: 1 #D0
+    dc_pin: 2 #D8

@@ -1,5 +1,6 @@
 #include "gxepd2Component.h"
 #include "esphome/core/log.h"
+#include "esphome/components/display/display_color_utils.h"
 
 namespace esphome {
 namespace gxepd2 {
@@ -29,8 +30,8 @@ void GxEPD2Component::dump_config() {
   LOG_UPDATE_INTERVAL(this);
 }
 
-void HOT GxEPD2Component::draw_absolute_pixel_internal(int x, int y, Color color) {
-  ESP_LOGD(TAG, "GxEPD2Component::draw_absolute_pixel_internal %d %d %d", x, y, color);
+void HOT GxEPD2Component::draw_pixel_at(int x, int y, Color color) {
+  ESP_LOGD(TAG, "GxEPD2Component::draw_pixel_at %d %d %d", x, y, color);
   auto color565 = display::ColorUtil::color_to_565(color);
   this->epd_->drawPixel(x, y, color565);
 }
@@ -43,8 +44,8 @@ void GxEPD2Component::update() {
   this->epd_->powerOff();
 }
 
-int HOT GxEPD2Component::get_width_internal() { return this->epd_->width(); }
-int HOT GxEPD2Component::get_height_internal() { return this->epd_->height(); }
+int HOT GxEPD2Component::get_width() { return this->epd_->width(); }
+int HOT GxEPD2Component::get_height() { return this->epd_->height(); }
 
 }  // namespace gxepd2
 }  // namespace esphome

@@ -2,7 +2,7 @@
 
 #include "esphome/core/component.h"
 #include "esphome/components/spi/spi.h"
-#include "esphome/components/display/display_buffer.h"
+#include "esphome/components/display/display.h"
 
 #include <GxEPD2_3C.h>
 
@@ -10,7 +10,7 @@ namespace esphome {
 namespace gxepd2 {
 
 class GxEPD2Component : public PollingComponent,
-                        public display::DisplayBuffer,
+                        public display::Display,
                         public spi::SPIDevice<spi::BIT_ORDER_MSB_FIRST, spi::CLOCK_POLARITY_HIGH,
                                               spi::CLOCK_PHASE_TRAILING, spi::DATA_RATE_10MHZ> {
  public:
@@ -21,6 +21,8 @@ class GxEPD2Component : public PollingComponent,
   void dump_config() override;
   void update() override;
 
+  void draw_pixel_at(int x, int y, Color color) override;
+
   display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_COLOR; }
 
  protected:
@@ -28,9 +30,9 @@ class GxEPD2Component : public PollingComponent,
   InternalGPIOPin *dc_pin_;
   InternalGPIOPin *cs_pin_;
 
-  int get_width_internal() override;
-  int get_height_internal() override;
-  void draw_absolute_pixel_internal(int x, int y, Color color) override;
+  int get_width() override;
+  int get_height() override;
+  // void draw_absolute_pixel_internal(int x, int y, Color color) override;
 };
 
 }  // namespace gxepd2

@@ -1,5 +1,7 @@
 #include "gxepd2Component.h"
 #include "esphome/core/log.h"
+#include "esphome/core/application.h"
+#include "esphome/components/display/display.h"
 #include "esphome/components/display/display_color_utils.h"
 
 namespace esphome {
@@ -18,7 +20,20 @@ void GxEPD2Component::setup() {
       GxEPD2_213_Z98c(this->cs_pin_->get_pin(), this->dc_pin_->get_pin(), -1, -1));
 
   this->epd_->init(115200, true, 2, false);
-  this->epd_->setRotation(1);
+  switch (this->rotation_) {
+    case esphome::display::DisplayRotation::DISPLAY_ROTATION_0_DEGREES:
+      this->epd_->setRotation(0);
+      break;
+    case esphome::display::DisplayRotation::DISPLAY_ROTATION_90_DEGREES:
+      this->epd_->setRotation(1);
+      break;
+    case esphome::display::DisplayRotation::DISPLAY_ROTATION_180_DEGREES:
+      this->epd_->setRotation(2);
+      break;
+    case esphome::display::DisplayRotation::DISPLAY_ROTATION_270_DEGREES:
+      this->epd_->setRotation(3);
+      break;
+  }
   this->epd_->setFullWindow();
   this->epd_->firstPage();
 }
@@ -38,9 +53,11 @@ void HOT GxEPD2Component::draw_pixel_at(int x, int y, Color color) {
 
 void GxEPD2Component::update() {
   ESP_LOGD(TAG, "GxEPD2Component::update");
-  while (this->epd_->nextPage())
-    ;
+  while (this->epd_->nextPage()) {
+    App.feed_wdt();
+  };
   this->epd_->powerOff();
+  App.feed_wdt();
 }
 
 int HOT GxEPD2Component::get_width() {

@@ -30,13 +30,13 @@ void GxEPD2Component::dump_config() {
 }
 
 void HOT GxEPD2Component::draw_absolute_pixel_internal(int x, int y, Color color) {
-  LOG_STR("GxEPD2Component::draw_absolute_pixel_internal");
+  ESP_LOGD(TAG, "GxEPD2Component::draw_absolute_pixel_internal %d %d %d", x, y, color);
   auto color565 = display::ColorUtil::color_to_565(color);
   this->epd_->drawPixel(x, y, color565);
 }
 
 void GxEPD2Component::update() {
-  LOG_STR("GxEPD2Component::update");
+  ESP_LOGD(TAG, "GxEPD2Component::update");
   this->epd_->fillScreen(GxEPD_BLACK);
   while (this->epd_->nextPage())
     ;

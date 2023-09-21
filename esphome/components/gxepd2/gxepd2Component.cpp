@@ -18,7 +18,7 @@ void GxEPD2Component::setup() {
   this->epd_ = new GxEPD2_3C<GxEPD2_213_Z98c, GxEPD2_213_Z98c::HEIGHT>(
       GxEPD2_213_Z98c(this->cs_pin_->get_pin(), this->dc_pin_->get_pin(), -1, -1));
 
-  this->epd_->init(115200, true, 2, false);
+  this->epd_->init(0, true, 2, false);
   this->epd_->setRotation(this->rotation_ / 90);
 }
 
@@ -40,10 +40,10 @@ void HOT GxEPD2Component::fill(Color color) {
 }
 
 void HOT GxEPD2Component::update() {
+  this->epd_->fillScreen(GxEPD_WHITE);
   this->do_update_();
-
   this->epd_->display(false);
-  this->epd_->powerOff();
+
   App.feed_wdt();
 }
 

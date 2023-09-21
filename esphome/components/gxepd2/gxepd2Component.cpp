@@ -29,20 +29,20 @@ void GxEPD2Component::dump_config() {
   LOG_UPDATE_INTERVAL(this);
 }
 
-void HOT GxEPD2Component::draw_pixel_at(int x, int y, Color color) {
-  auto color565 = display::ColorUtil::color_to_565(color);
-  this->epd_->drawPixel(x, y, color565);
+uint16_t HOT convert_color(Color color) {
+  if (color == display::COLOR_OFF) {
+    return display::ColorUtil::color_to_565(display::COLOR_ON);
+  } else if (color == display::COLOR_ON) {
+    return display::ColorUtil::color_to_565(display::COLOR_OFF);
+  }
+  return display::ColorUtil::color_to_565(color);
 }
 
-void HOT GxEPD2Component::fill(Color color) {
-  if (color == display::COLOR_OFF) {
-    color = display::COLOR_ON;
-  } else if (color == display::COLOR_ON) {
-    color = display::COLOR_OFF;
-  }
-  auto color565 = display::ColorUtil::color_to_565(color);
-  this->epd_->fillScreen(color565);
+void HOT GxEPD2Component::draw_pixel_at(int x, int y, Color color) {
+  this->epd_->drawPixel(x, y, convert_color(color));
 }
+
+void HOT GxEPD2Component::fill(Color color) { this->epd_->fillScreen(convert_color(color)); }
 
 void HOT GxEPD2Component::update() {
   this->epd_->firstPage();

@@ -35,6 +35,11 @@ void HOT GxEPD2Component::draw_pixel_at(int x, int y, Color color) {
 }
 
 void HOT GxEPD2Component::fill(Color color) {
+  if (color == display::COLOR_OFF) {
+    color = display::COLOR_ON;
+  } else if (color == display::COLOR_ON) {
+    color = display::COLOR_OFF;
+  }
   auto color565 = display::ColorUtil::color_to_565(color);
   this->epd_->fillScreen(color565);
 }

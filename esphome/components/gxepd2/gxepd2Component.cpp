@@ -43,7 +43,7 @@ void HOT GxEPD2Component::update() {
   this->epd_->firstPage();
   do {
     this->do_update_();
-  } while (this->epd_.nextPage());
+  } while (this->epd_->nextPage());
 
   App.feed_wdt();
 }

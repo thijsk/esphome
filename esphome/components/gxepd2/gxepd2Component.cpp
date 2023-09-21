@@ -42,6 +42,7 @@ void HOT GxEPD2Component::fill(Color color) {
 void HOT GxEPD2Component::update() {
   this->epd_->firstPage();
   do {
+    this->epd_->fillScreen(GxEPD_WHITE);
     this->do_update_();
   } while (this->epd_->nextPage());
 

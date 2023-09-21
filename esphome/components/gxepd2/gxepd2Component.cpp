@@ -43,7 +43,6 @@ void HOT GxEPD2Component::draw_pixel_at(int x, int y, Color color) {
     return;  // NOLINT
 
   if (x >= this->get_width() || x < 0 || y >= this->get_height() || y < 0) {
-    ESP_LOGD(TAG, "GxEPD2Component::draw_pixel_at out of bounds: x=%d, y=%d, color=%d", x, y, color);
     return;
   }
 

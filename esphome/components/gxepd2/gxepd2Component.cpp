@@ -36,14 +36,11 @@ void HOT GxEPD2Component::draw_pixel_at(int x, int y, Color color) {
 }
 
 void HOT GxEPD2Component::fill(Color color) {
-  ESP_LOGD(TAG, "GxEPD2Component::fill");
   auto color565 = display::ColorUtil::color_to_565(color);
   this->epd_->fillScreen(color565);
 }
 
 void HOT GxEPD2Component::update() {
-  ESP_LOGD(TAG, "GxEPD2Component::update");
-
   this->do_update_();
 
   this->epd_->display(false);
@@ -51,14 +48,8 @@ void HOT GxEPD2Component::update() {
   App.feed_wdt();
 }
 
-int HOT GxEPD2Component::get_width() {
-  ESP_LOGD(TAG, "GxEPD2Component::get_width %d", this->epd_->width());
-  return this->epd_->width();
-}
-int HOT GxEPD2Component::get_height() {
-  ESP_LOGD(TAG, "GxEPD2Component::get_height %d", this->epd_->height());
-  return this->epd_->height();
-}
+int HOT GxEPD2Component::get_width() { return this->epd_->width(); }
+int HOT GxEPD2Component::get_height() { return this->epd_->height(); }
 
 void GxEPD2Component::set_cs_pin(GPIOPin *cs) {
   ESP_LOGD(TAG, "GxEPD2Component::set_cs_pin");

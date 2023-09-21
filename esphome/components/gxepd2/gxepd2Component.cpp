@@ -30,7 +30,6 @@ void GxEPD2Component::dump_config() {
 }
 
 void HOT GxEPD2Component::draw_pixel_at(int x, int y, Color color) {
-  ESP_LOGD(TAG, "GxEPD2Component::draw_pixel_at %d %d", x, y);
   auto color565 = display::ColorUtil::color_to_565(color);
   this->epd_->drawPixel(x, y, color565);
 }

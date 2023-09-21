@@ -5,7 +5,6 @@ from esphome.components import display, spi
 from esphome.const import (
     CONF_BUSY_PIN,
     CONF_DC_PIN,
-    CONF_CS_PIN,
     CONF_ID,
     CONF_LAMBDA,
     CONF_PAGES,
@@ -47,12 +46,10 @@ async def to_code(config):
 
     await cg.register_component(var, config)
     await display.register_display(var, config)
-    # await spi.register_spi_device(var, config)
+    await spi.register_spi_device(var, config)
 
     dc = await cg.gpio_pin_expression(config[CONF_DC_PIN])
     cg.add(var.set_dc_pin(dc))
-    cs = await cg.gpio_pin_expression(config[CONF_CS_PIN])
-    cg.add(var.set_cs_pin(cs))
 
     if CONF_LAMBDA in config:
         lambda_ = await cg.process_lambda(

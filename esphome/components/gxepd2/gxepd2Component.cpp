@@ -14,28 +14,12 @@ void GxEPD2Component::setup() {
   this->spi_setup();
 
   this->dc_pin_->setup();  // OUTPUT
-  this->cs_pin_->setup();  // OUTPUT
 
   this->epd_ = new GxEPD2_3C<GxEPD2_213_Z98c, GxEPD2_213_Z98c::HEIGHT>(
       GxEPD2_213_Z98c(this->cs_pin_->get_pin(), this->dc_pin_->get_pin(), -1, -1));
 
   this->epd_->init(115200, true, 2, false);
-  switch (this->rotation_) {
-    case esphome::display::DisplayRotation::DISPLAY_ROTATION_0_DEGREES:
-      this->epd_->setRotation(0);
-      break;
-    case esphome::display::DisplayRotation::DISPLAY_ROTATION_90_DEGREES:
-      this->epd_->setRotation(1);
-      break;
-    case esphome::display::DisplayRotation::DISPLAY_ROTATION_180_DEGREES:
-      this->epd_->setRotation(2);
-      break;
-    case esphome::display::DisplayRotation::DISPLAY_ROTATION_270_DEGREES:
-      this->epd_->setRotation(3);
-      break;
-  }
-  this->epd_->setFullWindow();
-  this->epd_->firstPage();
+  this->epd_->setRotation(this->rotation_ / 90);
 }
 
 void GxEPD2Component::dump_config() {
@@ -51,20 +35,18 @@ void HOT GxEPD2Component::draw_pixel_at(int x, int y, Color color) {
   this->epd_->drawPixel(x, y, color565);
 }
 
-void GxEPD2Component::fill(Color color) {
+void HOT GxEPD2Component::fill(Color color) {
   ESP_LOGD(TAG, "GxEPD2Component::fill");
   auto color565 = display::ColorUtil::color_to_565(color);
   this->epd_->fillScreen(color565);
 }
 
-void GxEPD2Component::update() {
+void HOT GxEPD2Component::update() {
   ESP_LOGD(TAG, "GxEPD2Component::update");
 
   this->do_update_();
 
-  while (this->epd_->nextPage()) {
-    App.feed_wdt();
-  };
+  this->epd_->display(false);
   this->epd_->powerOff();
   App.feed_wdt();
 }
@@ -76,6 +58,12 @@ int HOT GxEPD2Component::get_width() {
 int HOT GxEPD2Component::get_height() {
   ESP_LOGD(TAG, "GxEPD2Component::get_height %d", this->epd_->height());
   return this->epd_->height();
+}
+
+void GxEPD2Component::set_cs_pin(GPIOPin *cs) {
+  ESP_LOGD(TAG, "GxEPD2Component::set_cs_pin");
+  SPIDevice::set_cs_pin(cs);
+  cs_pin_ = static_cast<InternalGPIOPin *>(cs);
 }
 
 }  // namespace gxepd2

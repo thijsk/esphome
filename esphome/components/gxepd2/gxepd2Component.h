@@ -15,7 +15,6 @@ class GxEPD2Component : public PollingComponent,
                                               spi::CLOCK_PHASE_TRAILING, spi::DATA_RATE_10MHZ> {
  public:
   void set_dc_pin(InternalGPIOPin *dc_pin) { dc_pin_ = dc_pin; }
-  void set_cs_pin(InternalGPIOPin *pin) { cs_pin_ = pin; }
 
   void setup() override;
   void dump_config() override;
@@ -26,6 +25,8 @@ class GxEPD2Component : public PollingComponent,
 
   display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_COLOR; }
 
+  void set_cs_pin(GPIOPin *cs);
+
  protected:
   GxEPD2_3C<GxEPD2_213_Z98c, GxEPD2_213_Z98c::HEIGHT> *epd_;
   InternalGPIOPin *dc_pin_;
@@ -33,7 +34,6 @@ class GxEPD2Component : public PollingComponent,
 
   int get_width() override;
   int get_height() override;
-  // void draw_absolute_pixel_internal(int x, int y, Color color) override;
 };
 
 }  // namespace gxepd2
